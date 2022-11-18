@@ -1,6 +1,7 @@
-import { sessionsCollection, signUpUserScheme, usersCollection } from "../index.js"
+import { signUpUserScheme} from "../index.js"
 import bcrypt from "bcrypt"
 import { v4 as uuidV4 } from "uuid"
+import { sessionsCollection, transactionsCollection, usersCollection } from "../DataBase/db.js"
 
 export async function postSignUp(req, res) {
     const userInfo = req.body
@@ -41,6 +42,7 @@ export async function postsignIn(req, res){
         }
         const createToken = uuidV4()
         await sessionsCollection.insertOne({ token: createToken, userId: user._id })
+        await transactionsCollection.insertOne({userId: user._id , transactions:[]})
         res.send({ token: createToken })
     } catch (err) {
         console.log(err)
