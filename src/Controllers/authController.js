@@ -26,7 +26,6 @@ export async function postSignIn(req, res) {
         }
         const createToken = uuidV4()
         await sessionsCollection.insertOne({ token: createToken, userId: user._id })
-        await transactionsCollection.insertOne({ userId: user._id, transactions: [] })
         res.send({ token: createToken })
     } catch (err) {
         console.log(err)
