@@ -1,5 +1,5 @@
 import { transactionsCollection } from "../DataBase/db.js"
-
+import dayjs from "dayjs"
 export async function postTransaction(req, res) {
     const userId = req.userId
     const { value, description, type } = req.transaction
@@ -8,7 +8,7 @@ export async function postTransaction(req, res) {
         // const userTransactions = await transactionsCollection.findOne({ userId })
         // const newTransactions = [...userTransactions.transactions, transaction]
         // await transactionsCollection.updateOne({ userId }, { $set: { ...userTransactions, transactions: newTransactions } })
-        await transactionsCollection.insertOne({ userId, value, description, type})
+        await transactionsCollection.insertOne({ userId, value, description, type, date:dayjs().format("DD/MM")})
         res.sendStatus(200)
     } catch (err) {
         console.log(err)

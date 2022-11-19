@@ -19,14 +19,15 @@ export async function postSignUp(req, res) {
 
 export async function postSignIn(req, res) {
     const user = req.user
+    console.log(user.name)
     try {
         const sessionExist = await sessionsCollection.findOne({ userId: user._id })
         if (sessionExist) {
-            return res.send({ token: sessionExist.token })
+            return res.send({ token: sessionExist.token , user:user.name})
         }
         const createToken = uuidV4()
         await sessionsCollection.insertOne({ token: createToken, userId: user._id })
-        res.send({ token: createToken })
+        res.send({token: createToken, user:user.name})
     } catch (err) {
         console.log(err)
         res.sendStatus(500)
