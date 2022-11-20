@@ -9,4 +9,6 @@ app.use(express.json())
 app.use(authRouter)
 app.use(transactionsRouters)
 
-app.listen(5000, () => console.log("Port 5000"))
+const port = process.env.PORT || 5000
+
+app.listen(port, () => console.log(`Server running in port ${port}`))

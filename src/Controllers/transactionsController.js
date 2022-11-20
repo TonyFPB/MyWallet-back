@@ -5,9 +5,6 @@ export async function postTransaction(req, res) {
     const { value, description, type } = req.transaction
 
     try {
-        // const userTransactions = await transactionsCollection.findOne({ userId })
-        // const newTransactions = [...userTransactions.transactions, transaction]
-        // await transactionsCollection.updateOne({ userId }, { $set: { ...userTransactions, transactions: newTransactions } })
         await transactionsCollection.insertOne({ userId, value, description, type, date:dayjs().format("DD/MM")})
         res.sendStatus(200)
     } catch (err) {

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
 import { v4 as uuidV4 } from "uuid"
-import { sessionsCollection, transactionsCollection, usersCollection } from "../DataBase/db.js"
+import { sessionsCollection , usersCollection } from "../DataBase/db.js"
 
 export async function postSignUp(req, res) {
     const user = req.user
@@ -19,7 +19,6 @@ export async function postSignUp(req, res) {
 
 export async function postSignIn(req, res) {
     const user = req.user
-    console.log(user.name)
     try {
         const sessionExist = await sessionsCollection.findOne({ userId: user._id })
         if (sessionExist) {
