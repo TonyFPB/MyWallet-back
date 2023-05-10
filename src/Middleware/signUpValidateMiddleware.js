@@ -1,4 +1,4 @@
-import signUpUserScheme from "../Schemas/signUpScheme.js"
+import signUpUserScheme from "../Schemas/signUp-schema.js"
 
 export default function signUpValidate(req, res, next) {
     const userInfo = req.body
