@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,6 +15,8 @@ model User {
   name        String
   email       String        @unique
   password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   Session     Session?
   Transaction Transaction[]
 
@@ -22,10 +24,12 @@ model User {
 }
 
 model Session {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  token  String @unique
-  userId String @unique @db.ObjectId
-  User   User   @relation(fields: [userId], references: [id])
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String   @unique
+  userId    String   @unique @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
 
   @@map("sessions")
 }
@@ -37,6 +41,8 @@ model Transaction {
   description String
   type        TransactionType
   date        DateTime        @db.Date
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
   User        User            @relation(fields: [userId], references: [id])
 
   @@map("transactions")

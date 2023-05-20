@@ -2,6 +2,9 @@
   "compilerOptions": {
     "outDir": "dist",
     "module": "CommonJS",
+    "target": "ES2020",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "baseUrl": "src",
     "esModuleInterop": true,

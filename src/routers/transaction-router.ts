@@ -1,12 +1,22 @@
-// import { Router } from "express";
+
 // import { getTransactions, postTransaction } from "../Controllers/transactionsController.js";
 // import authToken  from "../Middleware/authToken-middleware.js";
 // import transactionValidateMiddleware from "../Middleware/transactionValidateMiddleware.js";
+import { Router, Response } from "express";
+import { authToken, validateBody } from "../middlewares";
+import { transactionsSchema } from "../schemas";
+import { getTransactions } from "../controllers";
 
-// const router = Router()
+const transactionRouter = Router()
+
+transactionRouter
+  .all("/*", authToken)
+  .get("/", getTransactions)
+  .post("/new", validateBody(transactionsSchema))
+  
 // router.use(authToken)
 // router.get("/transactions", getTransactions)
 
 // router.post("/transactions",transactionValidateMiddleware ,postTransaction)
 
-// export default router
+export { transactionRouter }; 

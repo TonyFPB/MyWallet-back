@@ -24,16 +24,12 @@ export async function postSignIn(req: Request, res: Response) {
   const user = req.body as UserSignIn;
   try {
     const userSession = await userService.signInUser(user);
-    // const sessionExist = await sessionsCollection.findOne({ userId: user._id })
-    // if (sessionExist) {
-    //   return res.send({ token: sessionExist.token , user:user.name})
-    // }
-    // const createToken = uuidV4()
-    // await sessionsCollection.insertOne({ token: createToken, userId: user._id })
-    // res.send({token: createToken, user:user.name})
+    
     res.send(userSession);
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    if(err.name === "UserCreditialsError"){
+      return res.status(httpStatus.UNAUTHORIZED).send(err);
+    }
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }

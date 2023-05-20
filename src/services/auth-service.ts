@@ -14,25 +14,8 @@ async function signUpNewUser(user: NewUser) {
   const newUser = await userRepository.createNewUser(user.name, user.email, passwordHash);
 }
 
-async function signInUser(user: UserSignIn) {
-  const userExists = await userRepository.findUserByEmail(user.email);
-
-  if (!userExists || !bcrypt.compareSync(user.password, userExists.password)) throw userCreditialsError();
-  const { name, id: userId } = userExists;
-
-  const sessionUser = await sessionRepository.findSession(userId);
-
-  if (sessionUser) {
-    const { id: sessionId ,token } = sessionUser;
-    const userToken = await verifySession(sessionId, name, userId, token);
-    return userToken;
-  }else{
-    return createSession(name, userId);
-  }
-}
-
 async function createSession(name: string, userId: string) {
-  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET as string, {expiresIn: 86400});
+  const token = jwt.sign({ userId: userId }, process.env.JWT_SECRET as string, {expiresIn: 86400});
 
   const session = await sessionRepository.create(userId, token);
 
@@ -52,6 +35,24 @@ async function verifySession(sessionId: string,name: string, userId: string, tok
 
 }
 
+async function signInUser(user: UserSignIn) {
+  const userExists = await userRepository.findUserByEmail(user.email);
+
+  if (!userExists || !bcrypt.compareSync(user.password, userExists.password)) throw userCreditialsError();
+  const { name, id: userId } = userExists;
+
+  const sessionUser = await sessionRepository.findSession(userId);
+
+  if (sessionUser) {
+    const { id: sessionId ,token } = sessionUser;
+
+    const userToken = await verifySession(sessionId, name, userId, token);
+
+    return userToken;
+  }else{
+    return createSession(name, userId);
+  }
+}
 const userService = {
   signUpNewUser,
   signInUser

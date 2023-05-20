@@ -1,28 +1,39 @@
 import { Request, Response, NextFunction } from "express";
-import { ObjectId } from "mongodb";
-import { sessionRepository } from "../repositories";
+import httpStatus from "http-status";
+import * as jwt from "jsonwebtoken";
 
-export default async function authToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  const { authorization } = req.headers;
-  if (!authorization) {
-    return res.sendStatus(401);
+import { sessionRepository } from "../repositories";
+import { unauthorizedError } from "../errors";
+
+export async function authToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const authHeader = req.header("Authorization");
+
+  if (!authHeader) {
+    return generateUnauthorizedResponse(res);
   }
-  const token = authorization?.replace("Bearer ", "");
+  const [auth, token] = authHeader.split(" ");
+  if (auth !== "Bearer" || !token) return generateUnauthorizedResponse(res);
 
   try {
-    const session = await sessionRepository.findSession(token);
-    if (!session) {
-      return res.sendStatus(401);
-    }
-    req.userId = session.userId;
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET as string) as JWTPayload;
+
+    const session = await sessionRepository.findSessionByToken(token);
+    if (!session) return generateUnauthorizedResponse(res);
+
+    req.userId =  userId;
+
+    return next();
   } catch (err) {
-    res.sendStatus(500);
-  }
-  next();
+    return generateUnauthorizedResponse(res);
+  };
 }
 
-export type AuthenticatedRequest = Request & UserId;
-
-type UserId = {
-  userId: String
+function generateUnauthorizedResponse(res: Response) {
+  return res.status(httpStatus.UNAUTHORIZED).send(unauthorizedError());
 }
+
+export type AuthenticatedRequest = Request & JWTPayload;
+
+export type JWTPayload = {
+  userId?: string
+};
