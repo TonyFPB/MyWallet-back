@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
-import prisma  from "./DataBase/db"
-import { authRouter } from "./Routers"
+import prisma  from "./database/db"
+import { authRouter } from "./routers"
 // import authRouter from './Routers/authRoutes.js'
 // import transactionsRouters from "./Routers/transactionsRoutes.js"
 

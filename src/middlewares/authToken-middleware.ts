@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ObjectId } from "mongodb";
-import { sessionRepository } from "../Repositories";
+import { sessionRepository } from "../repositories";
 
 export default async function authToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const { authorization } = req.headers;
