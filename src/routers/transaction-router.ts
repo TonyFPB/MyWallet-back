@@ -5,14 +5,14 @@
 import { Router, Response } from "express";
 import { authToken, validateBody } from "../middlewares";
 import { transactionsSchema } from "../schemas";
-import { getTransactions } from "../controllers";
+import { getTransactions, postTransaction } from "../controllers";
 
 const transactionRouter = Router()
 
 transactionRouter
   .all("/*", authToken)
   .get("/", getTransactions)
-  .post("/new", validateBody(transactionsSchema))
+  .post("/new", validateBody(transactionsSchema), postTransaction)
   
 // router.use(authToken)
 // router.get("/transactions", getTransactions)

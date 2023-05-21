@@ -1,3 +1,4 @@
+import { TransactionType } from "@prisma/client";
 import prisma from "../database/db";
 
 async function findAllUserTransactions(userId: string){
@@ -13,8 +14,21 @@ async function findAllUserTransactions(userId: string){
   });
 }
 
+async function createTransaction(userId: string, value: number, description: string, type: TransactionType, date: string) {
+  return prisma.transaction.create({
+    data:{
+      userId,
+      value,
+      description,
+      type,
+      date
+    }
+  })
+}
+
 const transactionRepository = {
-  findAllUserTransactions
+  findAllUserTransactions,
+  createTransaction
 };
 
 export { transactionRepository };
