@@ -12,6 +12,7 @@ export async function postSignUp(req: Request, res: Response) {
 
     return res.sendStatus(201);
   } catch (err: any) {
+    console.log(err);
     if(err.name === "ConflictUserError"){
       return res.status(httpStatus.CONFLICT).send(err);
     }

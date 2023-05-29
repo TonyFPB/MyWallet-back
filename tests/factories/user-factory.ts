@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
+import * as jwt from "jsonwebtoken";
 import { prisma } from "../../src/database/db";
 import { User } from "@prisma/client";
 
@@ -19,8 +20,23 @@ async function createUser(params: Partial<User> = {}) {
   return user;
 }
 
+async function generateValidToken() {
+  const user = await createUser();
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: 864000 });
+
+  await prisma.session.create({
+    data: {
+      userId: user.id,
+      token: token
+    }
+  })
+  
+  return { user, token };
+}
+
 const userFactory = {
-  createUser
+  createUser,
+  generateValidToken
 }
 
 export { userFactory };

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "NODE_ENV=development nodemon src/server.ts",
-    "test": "npm run test:load-envs npx jest --passWithNoTests --runInBand --detectOpenHandles",
+    "test": "npm run test:load-envs npx jest --runInBand --passWithNoTests --detectOpenHandles",
     "test:load-envs": "dotenv -e .env.test"
   },
   "repository": {

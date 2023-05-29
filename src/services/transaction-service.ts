@@ -10,6 +10,7 @@ async function getUserTransactions(userId: string) {
 
 async function createNewTransaction(userId: string, transaction: NewTransaction) {
   const date = dayjs().toISOString()
+  
   const newTransaction = await transactionRepository.createTransaction(
     userId,
     transaction.value,

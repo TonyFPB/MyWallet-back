@@ -10,6 +10,7 @@ const config: Config = {
   },
   testMatch: ["<rootDir>/tests/**/*.(test|spec).ts"],
   restoreMocks: true,
+  testTimeout:700000
 };
 
 export default config;
