@@ -1,22 +1,22 @@
 import { TransactionType } from "@prisma/client";
-import prisma from "../database/db";
+import { prisma } from "../database/db";
 
-async function findAllUserTransactions(userId: string){
+async function findAllUserTransactions(userId: string) {
   return prisma.transaction.findMany({
-    where:{userId},
-    select:{
+    where: { userId },
+    select: {
       id: true,
       value: true,
-      description:true,
-      date:true,
-      type:true
+      description: true,
+      date: true,
+      type: true
     }
   });
 }
 
 async function createTransaction(userId: string, value: number, description: string, type: TransactionType, date: string) {
   return prisma.transaction.create({
-    data:{
+    data: {
       userId,
       value,
       description,

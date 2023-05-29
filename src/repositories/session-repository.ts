@@ -1,4 +1,4 @@
-import prisma from "../database/db";
+import { prisma } from "../database/db";
 
 async function findSession(userId: string) {
   return prisma.session.findUnique({

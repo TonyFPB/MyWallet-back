@@ -1,6 +1,6 @@
-import express from "express"
+import express, { Express } from "express"
 import cors from "cors"
-import prisma  from "./database/db"
+import { prisma }  from "./database/db"
 import { authRouter, transactionRouter } from "./routers"
 // import authRouter from './Routers/authRoutes.js'
 // import transactionsRouters from "./Routers/transactionsRoutes.js"
@@ -29,6 +29,4 @@ app.post("/", async (req, res) => {
   }
 })
 
-const port = process.env.PORT || 5000
-
-app.listen(port, () => console.log(`Server running in port ${port}`))
+export default app

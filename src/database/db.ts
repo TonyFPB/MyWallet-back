@@ -1,27 +1,23 @@
 import { PrismaClient } from "@prisma/client"
-import { MongoClient } from "mongodb"
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-dotenv.config()
+const loadEnv = () => {
+  let path;
+  if (process.env.NODE_ENV === "test") {
+    path = ".env.test";
+  } else if (process.env.NODE_ENV === "development") {
+    path = ".env.dev";
+  } else {
+    path = ".env";
+  }
+  // console.log(dotenv.config({ path }));
+  dotenv.config({ path });
+  
+}
 
+// dotenv.config()
+loadEnv()
+
+// console.log(process.env.TYPE);
 // const mongoClient = new MongoClient(process.env.MONGO_URI)
-const prisma = new PrismaClient();
-
-async function connect(){}
-
-export default prisma
-
-
-
-
-// try {
-//     await mongoClient.connect()
-//     console.log("Connected")
-// } catch (err) {
-//     console.log(err)
-// }
-
-// const db = mongoClient.db("myWallet")
-// export const usersCollection = db.collection("users")
-// export const sessionsCollection = db.collection("sessions")
-// export const transactionsCollection = db.collection("transactions")
+export let prisma: PrismaClient = new PrismaClient();
